@@ -1,13 +1,17 @@
 package com.erenduran.catchthemonkey;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Random;
 
@@ -63,6 +67,32 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                timeText.setText("Time Off");
+                handler.removeCallbacks(runnable);
+                for(ImageView image : imageArray){
+                    image.setVisibility(View.INVISIBLE);
+                }
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                alert.setTitle("Restart ?");
+                alert.setMessage("Are you sure to restart game ? ");
+                alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                            // restart
+
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
+                    }
+                });
+                alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(MainActivity.this,"Game Over!",Toast.LENGTH_LONG).show();
+                    }
+                });
+                alert.show();
 
             }
         }.start();
